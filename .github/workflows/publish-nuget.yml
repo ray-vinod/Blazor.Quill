@@ -8,8 +8,6 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    env:
-      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
     steps:
       - name: Validate Tag Format
@@ -44,7 +42,7 @@ jobs:
           set -o pipefail
           output=$(dotnet nuget push "nupkgs/*.nupkg" \
             --source https://api.nuget.org/v3/index.json \
-            --api-key $NUGET_API_KEY \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
             --skip-duplicate 2>&1)
 
           echo "$output"

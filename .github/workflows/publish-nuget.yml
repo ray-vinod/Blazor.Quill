@@ -42,13 +42,17 @@ jobs:
 
       - name: Push To NuGet Gallery
         run: |
-          dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v4/index.json --api-key ${{ secrets.NUGET_API_KEY }} \
+          dotnet nuget push "nupkgs/*.nupkg" \
+          --source https://api.nuget.org/v4/index.json \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
           --skip-duplicate || (echo "Package already exists on NuGet.org!" && exit 1)
 
       - name: Push To GitHub
         run: |
-          output=$(dotnet nuget push "nupkgs/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GH_API_SECRET }} \
-          --skip-duplicate) || (echo "Package already exists on NuGet.org!" && exit 1)
+           dotnet nuget push "nupkgs/*.nupkg" \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key $GH_API_SECRET \
+            --skip-duplicate || (echo "Package already exists on GitHub Packages!" && exit 1)
 
       - name: Create GitHub_Release
         id: create_release
@@ -65,8 +69,8 @@ jobs:
         uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: nupkgs/Blazor.Editor.${{ env.VERSION }}.nupkg
-          asset_name: Blazor.Editor.${{ env.VERSION }}.nupkg
+          asset_path: nupkgs/Blazor.Quill.${{ env.VERSION }}.nupkg
+          asset_name: Blazor.Quill.${{ env.VERSION }}.nupkg
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_API_SECRET }}

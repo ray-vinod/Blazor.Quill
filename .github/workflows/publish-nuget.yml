@@ -51,7 +51,7 @@ jobs:
         run: |
            dotnet nuget push "nupkgs/*.nupkg" \
             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-            --api-key $GH_API_SECRET \
+            --api-key ${{ secrets.GH_API_SECRET }} \
             --skip-duplicate || (echo "Package already exists on GitHub Packages!" && exit 1)
 
       - name: Create GitHub_Release

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <PackageId>Blazor.Quill</PackageId>
+    <Version>2.0.9</Version>
+    <Authors>ray-vinod</Authors>
+    <Product>BlazorQuill</Product>
+    <Company>ray-vinod</Company>
+    <Title>Blazor Editor</Title>
+    <PackageIcon></PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageDescription>It is quilljs@2.0.2 implemented blazor editor with get and set content</PackageDescription>
+    <PackageTags>Blazor.Quill;Blazor Quill;BlazorEditor;Blazor Editor;Blazor.Editor;Editor;EditorImageTool;EditorImageResize;Blog;BlogEditor;</PackageTags>
+    <PackageProjectUrl>https://github.com/ray-vinod/Blazor.Quill.git</PackageProjectUrl>
+    <License>MIT</License>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="Images/**" Pack="false" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="9.0.5" />
+  </ItemGroup>
+
+</Project>

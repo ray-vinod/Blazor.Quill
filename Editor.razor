@@ -1,0 +1,17 @@
+<HeadContent>
+    <!-- Quill stylesheet -->
+    <link rel="stylesheet" href="@Assets["_content/Blazor.Editor/css/quill.snow.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Blazor.Editor/css/quill.bubble.css"]" />
+    <link rel="stylesheet" href="@Assets["_content/Blazor.Editor/css/gallery.css"]" />
+
+    <!-- Quill library -->
+    <script src="_content/Blazor.Editor/js/quill.js"></script>
+    <script src="_content/Blazor.Editor/js/image-resize.js"></script>
+
+</HeadContent>
+
+<div @ref="@_quillElement"></div>
+
+<!-- ImageDisplay component used as a modal -->
+<Gallery Images="@_filteredImages" IsVisible="@_isImageModalVisible" OnImageClicked="@ImageClicked"
+    OnSearchTexChanged="@OnSearchTexChanged" />

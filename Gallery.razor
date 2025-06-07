@@ -1,0 +1,32 @@
+@using System.Text.Json
+
+@if (IsVisible)
+{
+    <div class="g-modal-container">
+    <div class="g-modal-content">
+        <!-- Modal title bar -->
+        <div class="g-modal-bar">
+            <div class="g-modal-title">Image Gallery</div>
+            <button @onclick="CloseModal" class="g-modal-close">X</button>
+        </div>
+
+        <!-- Search and link -->
+        <div class="g-modal-inputs">
+            <input @bind="@_linkUrl" type="text" class="g-input g-url-text" placeholder="Enter image URL..." />
+            <a @onclick="OnLinkClick" class="g-url-btn">Link</a>
+            <input @oninput="OnSearchInput" type="text" class="g-input g-search-text" placeholder="Search images..." />
+        </div>
+
+        <!-- Image list -->
+        <div class="g-image-list">
+            @foreach (var image in Images!)
+                {
+                    <div @onclick="() => OnImageClick(image)" class="g-image-list-item">
+                        <img src="@image.Src" class="g-image-icon" alt="@image.Alt" />
+                        <p class="g-image-name">@image.Alt</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

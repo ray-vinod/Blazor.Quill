@@ -1,0 +1,72 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate Tag
+        run: |
+          if [[ ! ${{ github.ref }} =~ ^refs/tags/v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "Invalid Tag & Version"
+            exit 1
+          fi
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0'
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Run Tests
+        run: dotnet test --configuration Release --no-restore
+
+      - name: Build Project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Create NuGet Package
+        run: dotnet pack --configuration Release --output ./nupkgs
+
+      - name: Set Version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+
+      - name: Push To NuGet Gallery
+        run: |
+          dotnet nuget push "nupkgs/*.nupkg" --source https://api.nuget.org/v4/index.json --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate || (echo "Package already exists on NuGet.org!" && exit 1)
+
+      - name: Push To GitHub
+        run: |
+          output=$(dotnet nuget push "nupkgs/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GH_API_SECRET }} \
+          --skip-duplicate) || (echo "Package already exists on NuGet.org!" && exit 1)
+
+      - name: Create GitHub_Release
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_API_SECRET }}
+
+      - name: Push To GitHub_Release
+        uses: actions/upload-release-asset@v1.0.2
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: nupkgs/Blazor.Editor.${{ env.VERSION }}.nupkg
+          asset_name: Blazor.Editor.${{ env.VERSION }}.nupkg
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_API_SECRET }}

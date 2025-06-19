@@ -8,11 +8,11 @@ it's accept ReadOnly, Placeholder, Theme, Height and endpoint url to insert imag
 
 Very simple to use add nuget package and use it.
 
-In this version 2.0.9 has update ui and core functions improvements like image search, resize, align etc and also package size optimized.
+In this version 2.0.10 has update ui and core functions improvements like image search, resize, align etc and also package size optimized.
 
 ## New Features in this version:
 
-- It updated for .Net 9.0 and fixed UI
+- It updated for .Net 9.0.6 and fixed UI
 - Image resize can be done from top and bottom
 - Compact resize toolbar
 - Image drop enable
@@ -22,7 +22,7 @@ In this version 2.0.9 has update ui and core functions improvements like image s
 ## How to add package into project
 
 ```
-dotnet add package Blazor.Quill --version 2.0.9
+dotnet add package Blazor.Quill --version 2.0.10
 ```
 ## How to use it
 
@@ -69,7 +69,7 @@ dotnet add package Blazor.Quill --version 2.0.9
     	{
     	    {
     	        "image", new ImageFile(){
-    	            Src = "https://img.freepik.com/free-photo/woman-black-shirt-pointing-left-showing-her-emotions_144627-60740.jpg?w=1800&t=st=1726579146~exp=1726579746~hmac=3e36f98f85bdf588086750ae11e6d218f846b9f9e74ba0418bd1c92175ad09c3",
+    	            Src = "https://img.freepik.com/free-photo/woman-black-shirt-pointing-left-showing-her-emotions_144627-60740.jpg?w=1800&t=st=1726579146~exp=1726579746~hmac=3e36f98f85bdf588086750ae11e6d218f846b9f9e74ba0418bd1c92175ad09c3...",
     	            Alt = "Image In Editor"
     	        }
     	    }
@@ -110,12 +110,12 @@ dotnet add package Blazor.Quill --version 2.0.9
 
 ### Editor Picture
 
-![Editor](https://raw.githubusercontent.com/ray-vinod/Blazor.Editor/refs/heads/main/Images/editor.jpg)
+![Editor](https://raw.githubusercontent.com/ray-vinod/Blazor.Quill/refs/heads/main/Images/editor.jpg)
 
-![Image selection](https://raw.githubusercontent.com/ray-vinod/Blazor.Editor/refs/heads/main/Images/image-choosing.jpg)
+![Image selection](https://raw.githubusercontent.com/ray-vinod/Blazor.Quill/refs/heads/main/Images/image-choosing.jpg)
 
-![Inserted image](https://raw.githubusercontent.com/ray-vinod/Blazor.Editor/refs/heads/main/Images/image-in-editor.jpg)
+![Inserted image](https://raw.githubusercontent.com/ray-vinod/Blazor.Quill/refs/heads/main/Images/image-in-editor.jpg)
 
-![Resize and Format](https://raw.githubusercontent.com/ray-vinod/Blazor.Editor/refs/heads/main/Images/resize-options.jpg)
+![Resize and Format](https://raw.githubusercontent.com/ray-vinod/Blazor.Quill/refs/heads/main/Images/resize-options.jpg)
 
-![Delta Object](https://raw.githubusercontent.com/ray-vinod/Blazor.Editor/refs/heads/main/Images/delta-object.jpg)
+![Delta Object](https://raw.githubusercontent.com/ray-vinod/Blazor.Quill/refs/heads/main/Images/delta-object.jpg)

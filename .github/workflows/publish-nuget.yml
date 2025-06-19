@@ -53,13 +53,21 @@ jobs:
 
       - name: Push to GitHub Packages
         run: |
+          set +e
           output=$(dotnet nuget push "nupkgs/*.nupkg" \
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-          --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate)
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate 2>&1)
+          exit_code=$?
           echo "$output"
+
           if echo "$output" | grep -q 'already exists'; then
             echo "Package already exists on GitHub Packages. Skipping push."
             exit 0
+          fi
+
+          if [ $exit_code -ne 0 ]; then
+            echo "dotnet nuget push failed with exit code $exit_code"
+            exit $exit_code
           fi
 
       - name: Create GitHub Release

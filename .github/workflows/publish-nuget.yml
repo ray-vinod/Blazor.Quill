@@ -37,29 +37,29 @@ jobs:
       - name: Create NuGet Package
         run: dotnet pack --configuration Release --output ./nupkgs
 
-      - name: Push to NuGet Gallery
+      - name: Check for .nupkg
         run: |
-          output=$(dotnet nuget push "bin/Release/*.nupkg" \
-          --source https://api.nuget.org/v3/index.json \
-          --api-key ${{ secrets.NUGET_API_KEY }} \
-          --skip-duplicate)
-          echo "$output"
-
-          if echo "$output" | grep -q 'already exists'; then
-            echo "$output"
+          if ! ls nupkgs/*.nupkg 1> /dev/null 2>&1; then
+            echo "No .nupkg files found. Exiting."
             exit 1
           fi
 
+      - name: Push to NuGet Gallery
+        run: |
+          dotnet nuget push "nupkgs/*.nupkg" \
+          --source https://api.nuget.org/v3/index.json \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate || echo "Package already exists on NuGet. Skipping push."
+
       - name: Push to GitHub Packages
         run: |
-          output=$(dotnet nuget push "bin/Release/*.nupkg" \
+          output=$(dotnet nuget push "nupkgs/*.nupkg" \
           --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
           --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate)
           echo "$output"
-
           if echo "$output" | grep -q 'already exists'; then
-            echo "$output"
-            exit 1
+            echo "Package already exists on GitHub Packages. Skipping push."
+            exit 0
           fi
 
       - name: Create GitHub Release
@@ -75,10 +75,18 @@ jobs:
 
       - name: Upload .nupkg to GitHub Release
         uses: actions/upload-release-asset@v1.0.2
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: nupkgs/Blazor.Quill.${{ github.ref_name }}.nupkg
-          asset_name: Blazor.Quill.${{ github.ref_name }}.nupkg
-          asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: $(ls nupkgs/*.nupkg | head -n 1)
+          asset_name: $(basename nupkgs/*.nupkg | head -n 1)
+          asset_content_type: application/octet-stream
+
+      - name: Notify Success
+        if: success()
+        run: echo "NuGet package published successfully!"
+
+      - name: Notify Failure
+        if: failure()
+        run: echo "Failed to publish NuGet package."

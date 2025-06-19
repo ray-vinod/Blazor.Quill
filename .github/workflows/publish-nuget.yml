@@ -39,27 +39,28 @@ jobs:
 
       - name: Push to NuGet Gallery
         run: |
-          set -o pipefail
-          output=$(dotnet nuget push "nupkgs/*.nupkg" \
-            --source https://api.nuget.org/v3/index.json \
-            --api-key ${{ secrets.NUGET_API_KEY }} \
-            --skip-duplicate 2>&1)
-
+          output=$(dotnet nuget push "bin/Release/*.nupkg" \
+          --source https://api.nuget.org/v3/index.json \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate)
           echo "$output"
-          exit_code=$?
-          exit $exit_code
+
+          if echo "$output" | grep -q 'already exists'; then
+            echo "$output"
+            exit 1
+          fi
 
       - name: Push to GitHub Packages
         run: |
-          set -o pipefail
-          output=$(dotnet nuget push "nupkgs/*.nupkg" \
-            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --skip-duplicate 2>&1)
-
+          output=$(dotnet nuget push "bin/Release/*.nupkg" \
+          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+          --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate)
           echo "$output"
-          exit_code=$?
-          exit $exit_code
+
+          if echo "$output" | grep -q 'already exists'; then
+            echo "$output"
+            exit 1
+          fi
 
       - name: Create GitHub Release
         id: create_release

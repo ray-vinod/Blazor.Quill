@@ -12,7 +12,7 @@ In this version 2.0.10 has update ui and core functions improvements like image 
 
 ## New Features in this version:
 
-- It updated for .Net 9.0.6 and fixed UI
+- It updated for .Net 10.0.3 and fixed UI
 - Image resize can be done from top and bottom
 - Compact resize toolbar
 - Image drop enable
